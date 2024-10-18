@@ -6,32 +6,23 @@
   :root {
     --background: 0 0% 100%;
     --foreground: 227 35% 25%;
-
     --card: 0 0% 100%;
     --card-foreground: 227 35% 25%;
-
     --popover: 0 0% 100%;
     --popover-foreground: 227 35% 25%;
-
     --primary: 174 86% 45%;
     --primary-foreground: 226 100% 87%;
-
     --secondary: 223 50% 87%;
     --secondary-foreground: 225 20% 60%;
-
     --muted: 224 65% 95%;
     --muted-foreground: 225 20% 60%;
-
     --accent: 174 77% 80%;
     --accent-foreground: 227 35% 25%;
-
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
-
     --border: 223 50% 87%;
     --input: 224 65% 95%;
     --ring: 174 86% 45%;
-
     --radius: 0.5rem;
   }
 }
@@ -40,7 +31,19 @@
   * {
     @apply border-border;
   }
+
+  /* Define border-border class */
+  .border-border {
+    border-color: hsl(var(--border));
+  }
+
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer components {
+  .pricing-card {
+    @apply p-4 bg-card border-border rounded-lg;
   }
 }
