@@ -4,11 +4,13 @@ import * as React from "react";
 import * as SliderPrimitive from "@radix-ui/react-slider";
 import { cn } from "@/lib/utils";
 
+interface CustomSliderProps extends React.ComponentPropsWithoutRef<typeof SliderPrimitive.Root> {
+  ThumbComponent?: React.ComponentType<{ isDragging: boolean }>;
+}
+
 const CustomSlider = React.forwardRef<
   React.ElementRef<typeof SliderPrimitive.Root>,
-  React.ComponentPropsWithoutRef<typeof SliderPrimitive.Root> & {
-    ThumbComponent?: React.ComponentType;
-  }
+  CustomSliderProps
 >(({ className, ThumbComponent, ...props }, ref) => {
   const [isDragging, setIsDragging] = React.useState(false);
 
@@ -25,20 +27,10 @@ const CustomSlider = React.forwardRef<
       {...props}
     >
       <SliderPrimitive.Track className="relative h-2 w-full grow overflow-hidden rounded-full bg-[#ECF0FB]">
-        <SliderPrimitive.Range
-          className={cn(
-            "absolute h-full bg-[#10D5C2] transition-shadow duration-200",
-            isDragging && "shadow-[0_0_20px_#10D5C2]"
-          )}
-        />
+        <SliderPrimitive.Range className="absolute h-full bg-[#10D5C2]" />
       </SliderPrimitive.Track>
-      <SliderPrimitive.Thumb
-        className={cn(
-          "block h-10 w-10 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
-          isDragging && "shadow-[0_0_20px_#10D5C2]"
-        )}
-      >
-        {ThumbComponent && <ThumbComponent />}
+      <SliderPrimitive.Thumb className="block h-10 w-10 rounded-full focus:outline-none focus:ring-0 focus:ring-offset-0">
+        {ThumbComponent && <ThumbComponent isDragging={isDragging} />}
       </SliderPrimitive.Thumb>
     </SliderPrimitive.Root>
   );
