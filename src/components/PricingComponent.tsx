@@ -92,7 +92,6 @@ const SimpleAnimatedBackground = () => (
 export default function PricingComponent() {
   const [currentTierIndex, setCurrentTierIndex] = useState<number>(2);
   const [isYearly, setIsYearly] = useState<boolean>(false);
-  const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => setMounted(true), []);
@@ -103,10 +102,6 @@ export default function PricingComponent() {
     : currentTier.monthlyPrice;
 
   if (!mounted) return null;
-
-  // const toggleTheme = () => {
-  //   setTheme(theme === "dark" ? "light" : "dark");
-  // };
 
   return (
     <div className="min-h-screen flex flex-col relative transition-colors duration-300">
