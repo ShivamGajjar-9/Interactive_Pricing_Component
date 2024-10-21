@@ -23,12 +23,14 @@ const PRICING_TIERS: PricingTier[] = [
 const SliderThumb = ({ isDragging }: { isDragging: boolean }) => (
   <div
     className={`flex items-center justify-center w-10 h-10 rounded-full bg-primary hover:bg-accent transition-all duration-300 ${
-      isDragging ? 'shadow-[0_0_20px_rgba(16,213,194,0.6)]' : 'shadow-lg shadow-primary/30'
+      isDragging
+        ? "shadow-[0_0_20px_rgba(16,213,194,0.6)]"
+        : "shadow-lg shadow-primary/30"
     }`}
   >
     <svg width="22" height="13" xmlns="http://www.w3.org/2000/svg">
       <g fill="#FFF" fillRule="evenodd">
-        <path d="M16 2.558v7.884a1 1 0 001.735.679l3.639-3.943a1 1 0 000-1.356l-3.64-3.943A1 1 0 0016 2.558zM6 2.558v7.884a1 1 0 01-1.735.679L.626 7.178a1 1 0 010-1.356l3.64-3.943A1 1 0 016 2.558z"/>
+        <path d="M16 2.558v7.884a1 1 0 001.735.679l3.639-3.943a1 1 0 000-1.356l-3.64-3.943A1 1 0 0016 2.558zM6 2.558v7.884a1 1 0 01-1.735.679L.626 7.178a1 1 0 010-1.356l3.64-3.943A1 1 0 016 2.558z" />
       </g>
     </svg>
   </div>
@@ -76,6 +78,16 @@ const ThemeToggle = () => {
   );
 };
 
+const SimpleAnimatedBackground = () => (
+  <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
+    <div className="absolute inset-0 opacity-50">
+      <div className="absolute inset-0 bg-grid-primary/[0.05] bg-[size:20px_20px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)]"></div>
+    </div>
+    <div className="absolute inset-0 flex items-center justify-center">
+      <div className="h-[800px] w-[800px] rounded-full bg-primary/10 animate-pulse"></div>
+    </div>
+  </div>
+);
 
 export default function PricingComponent() {
   const [currentTierIndex, setCurrentTierIndex] = useState<number>(2);
@@ -93,16 +105,14 @@ export default function PricingComponent() {
   if (!mounted) return null;
 
   const toggleTheme = () => {
-    setTheme(theme === 'dark' ? 'light' : 'dark');
+    setTheme(theme === "dark" ? "light" : "dark");
   };
 
   return (
     <div className="min-h-screen flex flex-col relative transition-colors duration-300">
-      <div className="absolute top-0 left-0 right-0 h-1/2 bg-muted z-0"></div>
-      
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-secondary rounded-full opacity-50 blur-3xl z-0"></div>
-      <div className="absolute top-20 right-1/4 w-[400px] h-[400px] bg-secondary rounded-full opacity-50 blur-3xl z-0"></div>
-      
+      <SimpleAnimatedBackground />
+      <ThemeToggle />
+
       <div className="flex-grow flex items-center justify-center p-4 relative z-10">
         <div className="w-full max-w-xl">
           <div className="text-center mb-10">
@@ -138,14 +148,18 @@ export default function PricingComponent() {
             </div>
 
             <div className="flex items-center justify-center gap-4 mb-10">
-              <span className="text-muted-foreground text-sm">Monthly Billing</span>
+              <span className="text-muted-foreground text-sm">
+                Monthly Billing
+              </span>
               <Switch
                 checked={isYearly}
                 onCheckedChange={setIsYearly}
                 className="bg-secondary data-[state=checked]:bg-primary"
               />
               <div className="flex items-center">
-                <span className="text-muted-foreground text-sm">Yearly Billing</span>
+                <span className="text-muted-foreground text-sm">
+                  Yearly Billing
+                </span>
                 <span className="ml-2 text-[#FF8C66] bg-[#FEEDE8] text-xs font-bold px-2 py-1 rounded-full">
                   -25%
                 </span>
@@ -174,10 +188,6 @@ export default function PricingComponent() {
                 Start my trial
               </Button>
             </div>
-          </div>
-
-          <div className="mt-8 text-center">
-            <ThemeToggle />
           </div>
         </div>
       </div>
