@@ -104,9 +104,9 @@ export default function PricingComponent() {
 
   if (!mounted) return null;
 
-  const toggleTheme = () => {
-    setTheme(theme === "dark" ? "light" : "dark");
-  };
+  // const toggleTheme = () => {
+  //   setTheme(theme === "dark" ? "light" : "dark");
+  // };
 
   return (
     <div className="min-h-screen flex flex-col relative transition-colors duration-300">
