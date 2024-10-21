@@ -1,9 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 import { CustomSlider } from "@/components/ui/custom-slider";
+import { useTheme } from "next-themes";
+import { Sun, Moon } from "lucide-react";
 
 interface PricingTier {
   pageviews: string;
@@ -20,8 +22,8 @@ const PRICING_TIERS: PricingTier[] = [
 
 const SliderThumb = ({ isDragging }: { isDragging: boolean }) => (
   <div
-    className={`flex items-center justify-center w-10 h-10 rounded-full bg-[#10D5C2] hover:bg-[#7AEADF] transition-all duration-300 ${
-      isDragging ? 'shadow-[0_0_20px_rgba(16,213,194,0.6)]' : 'shadow-lg shadow-[#10D5C2]/30'
+    className={`flex items-center justify-center w-10 h-10 rounded-full bg-primary hover:bg-accent transition-all duration-300 ${
+      isDragging ? 'shadow-[0_0_20px_rgba(16,213,194,0.6)]' : 'shadow-lg shadow-primary/30'
     }`}
   >
     <svg width="22" height="13" xmlns="http://www.w3.org/2000/svg">
@@ -47,43 +49,81 @@ const CheckIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
+const ThemeToggle = () => {
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => setMounted(true), []);
+
+  if (!mounted) return null;
+
+  return (
+    <div className="fixed top-4 right-4 z-50">
+      <Button
+        variant="outline"
+        size="icon"
+        className="w-10 h-10 rounded-full bg-background hover:bg-muted"
+        onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+      >
+        {theme === "dark" ? (
+          <Sun className="h-[1.2rem] w-[1.2rem]" />
+        ) : (
+          <Moon className="h-[1.2rem] w-[1.2rem]" />
+        )}
+        <span className="sr-only">Toggle theme</span>
+      </Button>
+    </div>
+  );
+};
+
+
 export default function PricingComponent() {
   const [currentTierIndex, setCurrentTierIndex] = useState<number>(2);
   const [isYearly, setIsYearly] = useState<boolean>(false);
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => setMounted(true), []);
 
   const currentTier = PRICING_TIERS[currentTierIndex];
   const price = isYearly
     ? (currentTier.monthlyPrice * 12 * 0.75) / 12
     : currentTier.monthlyPrice;
 
+  if (!mounted) return null;
+
+  const toggleTheme = () => {
+    setTheme(theme === 'dark' ? 'light' : 'dark');
+  };
+
   return (
-    <div className="min-h-screen flex flex-col relative">
-      <div className="absolute top-0 left-0 right-0 h-1/2 bg-[#F1F5FE] z-0"></div>
+    <div className="min-h-screen flex flex-col relative transition-colors duration-300">
+      <div className="absolute top-0 left-0 right-0 h-1/2 bg-muted z-0"></div>
       
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-[#F9FAFF] rounded-full opacity-50 blur-3xl z-0"></div>
-      <div className="absolute top-20 right-1/4 w-[400px] h-[400px] bg-[#F9FAFF] rounded-full opacity-50 blur-3xl z-0"></div>
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-secondary rounded-full opacity-50 blur-3xl z-0"></div>
+      <div className="absolute top-20 right-1/4 w-[400px] h-[400px] bg-secondary rounded-full opacity-50 blur-3xl z-0"></div>
       
       <div className="flex-grow flex items-center justify-center p-4 relative z-10">
         <div className="w-full max-w-xl">
           <div className="text-center mb-10">
-            <h1 className="text-[#293356] text-3xl font-extrabold mb-2">
+            <h1 className="text-foreground text-3xl font-extrabold mb-2">
               Simple, traffic-based pricing
             </h1>
-            <p className="text-[#858FAD] text-sm">
+            <p className="text-muted-foreground text-sm">
               Sign-up for our 30-day trial. No credit card required.
             </p>
           </div>
 
-          <div className="bg-white rounded-lg shadow-lg p-6 md:p-10">
+          <div className="bg-card rounded-lg shadow-lg p-6 md:p-10">
             <div className="flex flex-col md:flex-row items-center justify-between mb-8">
-              <p className="text-[#858FAD] uppercase tracking-wider text-sm font-bold">
+              <p className="text-muted-foreground uppercase tracking-wider text-sm font-bold">
                 {currentTier.pageviews} Pageviews
               </p>
               <div className="flex items-center mt-4 md:mt-0">
-                <span className="text-4xl font-extrabold text-[#293356]">
+                <span className="text-4xl font-extrabold text-foreground">
                   ${price.toFixed(2)}
                 </span>
-                <span className="text-[#858FAD] ml-2">/ month</span>
+                <span className="text-muted-foreground ml-2">/ month</span>
               </div>
             </div>
 
@@ -98,42 +138,46 @@ export default function PricingComponent() {
             </div>
 
             <div className="flex items-center justify-center gap-4 mb-10">
-              <span className="text-[#858FAD] text-sm">Monthly Billing</span>
+              <span className="text-muted-foreground text-sm">Monthly Billing</span>
               <Switch
                 checked={isYearly}
                 onCheckedChange={setIsYearly}
-                className="bg-[#CFD8EF] data-[state=checked]:bg-[#10D5C2]"
+                className="bg-secondary data-[state=checked]:bg-primary"
               />
               <div className="flex items-center">
-                <span className="text-[#858FAD] text-sm">Yearly Billing</span>
+                <span className="text-muted-foreground text-sm">Yearly Billing</span>
                 <span className="ml-2 text-[#FF8C66] bg-[#FEEDE8] text-xs font-bold px-2 py-1 rounded-full">
                   -25%
                 </span>
               </div>
             </div>
 
-            <hr className="border-[#ECF0FB] mb-8" />
+            <hr className="border-border mb-8" />
 
             <div className="flex flex-col md:flex-row items-center justify-between">
               <ul className="space-y-3 mb-8 md:mb-0">
-                <li className="flex items-center text-[#858FAD] text-sm">
-                  <CheckIcon className="w-4 h-4 text-[#10D5C2] mr-2" />
+                <li className="flex items-center text-muted-foreground text-sm">
+                  <CheckIcon className="w-4 h-4 text-primary mr-2" />
                   Unlimited websites
                 </li>
-                <li className="flex items-center text-[#858FAD] text-sm">
-                  <CheckIcon className="w-4 h-4 text-[#10D5C2] mr-2" />
+                <li className="flex items-center text-muted-foreground text-sm">
+                  <CheckIcon className="w-4 h-4 text-primary mr-2" />
                   100% data ownership
                 </li>
-                <li className="flex items-center text-[#858FAD] text-sm">
-                  <CheckIcon className="w-4 h-4 text-[#10D5C2] mr-2" />
+                <li className="flex items-center text-muted-foreground text-sm">
+                  <CheckIcon className="w-4 h-4 text-primary mr-2" />
                   Email reports
                 </li>
               </ul>
 
-              <Button className="bg-[#293356] hover:bg-opacity-80 text-[#BECDFF] px-12">
+              <Button className="rounded-full bg-slate-700 hover:bg-slate-600 text-white px-12">
                 Start my trial
               </Button>
             </div>
+          </div>
+
+          <div className="mt-8 text-center">
+            <ThemeToggle />
           </div>
         </div>
       </div>
