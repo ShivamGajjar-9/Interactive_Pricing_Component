@@ -29,7 +29,7 @@ Users should be able to:
 
 ### Screenshot
 
-![https://ibb.co/Gvhm053](Screenshot)
+![Screenshot](./public/screenshot.png)
 
 ### Links
 
