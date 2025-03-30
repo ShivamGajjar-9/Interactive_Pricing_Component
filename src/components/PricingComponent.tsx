@@ -22,11 +22,9 @@ const PRICING_TIERS: PricingTier[] = [
 
 const SliderThumb = ({ isDragging }: { isDragging: boolean }) => (
   <div
-    className={`flex items-center justify-center w-10 h-10 rounded-full bg-primary hover:bg-accent transition-all duration-300 ${
-      isDragging
-        ? "shadow-[0_0_20px_rgba(16,213,194,0.6)]"
-        : "shadow-lg shadow-primary/30"
-    }`}
+    className={`flex items-center justify-center w-10 h-10 rounded-full bg-[#10D5C2] ${
+      isDragging ? "scale-110" : ""
+    } transition-transform`}
   >
     <svg width="22" height="13" xmlns="http://www.w3.org/2000/svg">
       <g fill="#FFF" fillRule="evenodd">
@@ -78,17 +76,6 @@ const ThemeToggle = () => {
   );
 };
 
-const SimpleAnimatedBackground = () => (
-  <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
-    <div className="absolute inset-0 opacity-50">
-      <div className="absolute inset-0 bg-grid-primary/[0.05] bg-[size:20px_20px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)]"></div>
-    </div>
-    <div className="absolute inset-0 flex items-center justify-center">
-      <div className="h-[800px] w-[800px] rounded-full bg-primary/10 animate-pulse"></div>
-    </div>
-  </div>
-);
-
 export default function PricingComponent() {
   const [currentTierIndex, setCurrentTierIndex] = useState<number>(2);
   const [isYearly, setIsYearly] = useState<boolean>(false);
@@ -98,37 +85,36 @@ export default function PricingComponent() {
 
   const currentTier = PRICING_TIERS[currentTierIndex];
   const price = isYearly
-    ? (currentTier.monthlyPrice * 12 * 0.75) / 12
+    ? currentTier.monthlyPrice * 0.65 // 35% discount
     : currentTier.monthlyPrice;
 
   if (!mounted) return null;
 
   return (
-    <div className="min-h-screen flex flex-col relative transition-colors duration-300">
-      <SimpleAnimatedBackground />
+    <div className="min-h-screen flex flex-col relative bg-[#F7FAFF]">
       <ThemeToggle />
 
       <div className="flex-grow flex items-center justify-center p-4 relative z-10">
         <div className="w-full max-w-xl">
           <div className="text-center mb-10">
-            <h1 className="text-foreground text-3xl font-extrabold mb-2">
+            <h1 className="text-[#293356] text-3xl font-extrabold mb-2">
               Simple, traffic-based pricing
             </h1>
-            <p className="text-muted-foreground text-sm">
+            <p className="text-[#848EAD] text-sm">
               Sign-up for our 30-day trial. No credit card required.
             </p>
           </div>
 
-          <div className="bg-card rounded-lg shadow-lg p-6 md:p-10">
+          <div className="bg-white rounded-lg shadow-lg p-6 md:p-10">
             <div className="flex flex-col md:flex-row items-center justify-between mb-8">
-              <p className="text-muted-foreground uppercase tracking-wider text-sm font-bold">
-                {currentTier.pageviews} Pageviews
+              <p className="text-[#848EAD] uppercase tracking-wider text-sm font-bold">
+                {currentTier.pageviews} PAGEVIEWS
               </p>
               <div className="flex items-center mt-4 md:mt-0">
-                <span className="text-4xl font-extrabold text-foreground">
+                <span className="text-4xl font-extrabold text-[#293356]">
                   ${price.toFixed(2)}
                 </span>
-                <span className="text-muted-foreground ml-2">/ month</span>
+                <span className="text-[#848EAD] ml-2">/ month</span>
               </div>
             </div>
 
@@ -139,47 +125,44 @@ export default function PricingComponent() {
                 step={1}
                 onValueChange={(value) => setCurrentTierIndex(value[0])}
                 ThumbComponent={SliderThumb}
+                className="bg-[#A4F3EB]"
               />
             </div>
 
             <div className="flex items-center justify-center gap-4 mb-10">
-              <span className="text-muted-foreground text-sm">
-                Monthly Billing
-              </span>
+              <span className="text-[#848EAD] text-sm">Monthly billing</span>
               <Switch
                 checked={isYearly}
                 onCheckedChange={setIsYearly}
-                className="bg-secondary data-[state=checked]:bg-primary"
+                className="bg-[#CFD8EF] data-[state=checked]:bg-[#7AEADF]"
               />
               <div className="flex items-center">
-                <span className="text-muted-foreground text-sm">
-                  Yearly Billing
-                </span>
-                <span className="ml-2 text-[#FF8C66] bg-[#FEEDE8] text-xs font-bold px-2 py-1 rounded-full">
-                  -25%
+                <span className="text-[#848EAD] text-sm">Yearly billing</span>
+                <span className="ml-2 text-[#FF8D68] bg-[#FEEDE8] text-xs font-bold px-2 py-1 rounded-full">
+                  35% discount
                 </span>
               </div>
             </div>
 
-            <hr className="border-border mb-8" />
+            <hr className="border-[#ECF0FB] mb-8" />
 
             <div className="flex flex-col md:flex-row items-center justify-between">
               <ul className="space-y-3 mb-8 md:mb-0">
-                <li className="flex items-center text-muted-foreground text-sm">
-                  <CheckIcon className="w-4 h-4 text-primary mr-2" />
+                <li className="flex items-center text-[#848EAD] text-sm">
+                  <CheckIcon className="w-4 h-4 text-[#10D5C2] mr-2" />
                   Unlimited websites
                 </li>
-                <li className="flex items-center text-muted-foreground text-sm">
-                  <CheckIcon className="w-4 h-4 text-primary mr-2" />
+                <li className="flex items-center text-[#848EAD] text-sm">
+                  <CheckIcon className="w-4 h-4 text-[#10D5C2] mr-2" />
                   100% data ownership
                 </li>
-                <li className="flex items-center text-muted-foreground text-sm">
-                  <CheckIcon className="w-4 h-4 text-primary mr-2" />
+                <li className="flex items-center text-[#848EAD] text-sm">
+                  <CheckIcon className="w-4 h-4 text-[#10D5C2] mr-2" />
                   Email reports
                 </li>
               </ul>
 
-              <Button className="rounded-full bg-slate-700 hover:bg-slate-600 text-white px-12">
+              <Button className="rounded-full bg-[#293356] hover:bg-[#293356]/90 text-white px-12">
                 Start my trial
               </Button>
             </div>
@@ -189,5 +172,3 @@ export default function PricingComponent() {
     </div>
   );
 }
-
-export { CustomSlider, PricingComponent };
