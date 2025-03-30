@@ -122,6 +122,4 @@ Areas I want to focus on in future projects:
 
 ## Author
 
-- Website - [Shreyansh Shukla](https://shreyanshshukla.vercel.app/)
-- Frontend Mentor - [@shreyansh1410](https://www.frontendmentor.io/profile/shreyansh1410)
-- X (formerly Twitter) - [@shreyansh1410](https://www.x.com/shreyansh1410)
+- Github - [@ShivamGajjar-9](https://github.com/ShivamGajjar-9)
